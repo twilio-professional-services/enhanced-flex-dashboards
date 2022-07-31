@@ -20,16 +20,24 @@ const displayRoleCode = (manager) => {
 const addColumns = () => {
   WorkersDataTable.Content.add(<ColumnDefinition key="maxChat" header={"Chat Util."} style={{ width: 75 }}
     content={item => {
-      if (Object.hasOwn(item.worker.attributes, "chatTasks") && Object.hasOwn(item.worker.attributes, "chatCapacity")) {
-        return item.worker.attributes.chatTasks + " / " + item.worker.attributes.chatCapacity;
+      if (Object.hasOwn(item.worker.attributes, "chatTasks") 
+      && Object.hasOwn(item.worker.attributes, "chatCapacity")
+      && Object.hasOwn(item.worker.attributes, "chatAvailable")) {
+        return item.worker.attributes.chatAvailable ? 
+        item.worker.attributes.chatTasks + " / " + item.worker.attributes.chatCapacity:
+        "X";
       } else {
         return "?";
       }
     }} />);
   WorkersDataTable.Content.add(<ColumnDefinition key="maxSMS" header={"SMS Util."} style={{ width: 75 }}
     content={item => {
-      if (Object.hasOwn(item.worker.attributes, "smsTasks") && Object.hasOwn(item.worker.attributes, "smsCapacity")) {
-        return item.worker.attributes.smsTasks + " / " + item.worker.attributes.smsCapacity;
+      if (Object.hasOwn(item.worker.attributes, "smsTasks") 
+      && Object.hasOwn(item.worker.attributes, "smsCapacity")
+      && Object.hasOwn(item.worker.attributes, "smsAvailable")) {
+        return item.worker.attributes.smsAvailable ?
+        item.worker.attributes.smsTasks + " / " + item.worker.attributes.smsCapacity:
+        "X";
       } else {
         return "?";
       }
