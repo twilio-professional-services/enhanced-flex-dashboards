@@ -13,7 +13,14 @@ This plugin contains a set of enhancements for the Teams View and the Real-Time 
 - Add the Chat and SMS channel utilization (assigned / capacity)
 - Display the agent's Skills
 
-This plugin leverages a Serverless function to update a worker's attributes with the Chat and SMS channel capacity and assigned tasks counts.   
+The Flex [Real-Time Queues View](https://www.twilio.com/docs/flex/end-user-guide/insights/real-time-queues-view) displays all queues unless you set a [filter](https://www.twilio.com/docs/flex/developer/ui/queues-view-programmability#setfilter) that hides or displays only some queues.
+
+The [Queues Data Table](https://www.twilio.com/docs/flex/developer/ui/queues-view-programmability#modify-the-queuesdatatable) can be modifed by removing and (re)adding columns with metrics.
+
+Similarly, the Teams View can be modified by adding and removing columns in the [WorkersDataTable](https://www.twilio.com/docs/flex/developer/ui/components#add-columns-to-workersdatatable). 
+
+This plugin leverages a Serverless function to update a worker's attributes with the Chat and SMS channel capacity and assigned tasks counts from the [Worker Channel Resource](https://www.twilio.com/docs/taskrouter/api/worker-channel).
+
 
 # Configuration
 

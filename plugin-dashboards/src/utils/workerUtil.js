@@ -3,7 +3,8 @@ const manager = Manager.getInstance();
 const PLUGIN_NAME = 'DashboardsPlugin';
 
 export const updateWorkerCapacity = async (worker) => {
-
+  //Note: This only works at plugin init.  
+  //TR SDK does not receive real-time updates from Worker Channel changes to assigned tasks
   let chatCapacity = 0, smsCapacity = 0;
   let chatTasks = 0, smsTasks = 0;
   let workerChannels = worker.channels; // returns Map
