@@ -10,7 +10,7 @@ This plugin contains a set of enhancements for the Teams View and the Real-Time 
 - Filter Queues View by Agent's team_name attribute
 - Selectively remove a metric (waiting-tasks) based on the Queue Name
 - Add the agent's role code (A = Agent, S = Supervisor, D = Admin) in the Teams View
-- Add the Chat and SMS channel utilization (assigned / capacity)
+- Add the Chat and SMS channel utilization (assigned / capacity, X = Unavailable)
 - Display the agent's Skills
 
 The Flex [Real-Time Queues View](https://www.twilio.com/docs/flex/end-user-guide/insights/real-time-queues-view) displays all queues unless you set a [filter](https://www.twilio.com/docs/flex/developer/ui/queues-view-programmability#setfilter) that hides or displays only some queues.
@@ -20,6 +20,9 @@ The [Queues Data Table](https://www.twilio.com/docs/flex/developer/ui/queues-vie
 Similarly, the Teams View can be modified by adding and removing columns in the [WorkersDataTable](https://www.twilio.com/docs/flex/developer/ui/components#add-columns-to-workersdatatable). 
 
 This plugin leverages a Serverless function to update a worker's attributes with the Chat and SMS channel capacity and assigned tasks counts from the [Worker Channel Resource](https://www.twilio.com/docs/taskrouter/api/worker-channel).
+
+<img width="800px" src="images/enhancedTeamsView.png"/>
+
 
 
 # Configuration
