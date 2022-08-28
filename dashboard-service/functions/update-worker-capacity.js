@@ -21,7 +21,7 @@ exports.handler = TokenValidator(async function (context, event, callback) {
       .list({ limit: 20 });
 
     workerChannels.forEach(wc => {
-      console.log(wc);
+      //console.log(wc);
       if (wc.taskChannelUniqueName == "chat") {
         chatCapacity = wc.configuredCapacity;
         chatTasks = wc.assignedTasks;
@@ -40,7 +40,7 @@ exports.handler = TokenValidator(async function (context, event, callback) {
       .workers(workerSid)
       .fetch();
 
-    console.log('Worker:', worker);
+    //console.log('Worker:', worker);
     // Worker Attributes are encoded as Json string
     let workersAttributes = JSON.parse(worker.attributes);
 
@@ -53,7 +53,7 @@ exports.handler = TokenValidator(async function (context, event, callback) {
       .workers(workerSid)
       .update({ attributes: JSON.stringify(workersAttributes) });
 
-    console.log('Updated', workerSid, 'attributes with', workersAttributes);
+    //console.log('Updated', workerSid, 'attributes with', workersAttributes);
 
     response.appendHeader("Content-Type", "application/json");
     response.setBody(JSON.parse(updateWorker.attributes));

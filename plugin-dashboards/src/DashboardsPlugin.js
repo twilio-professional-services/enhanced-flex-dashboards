@@ -9,6 +9,9 @@ import CustomActions from './actions';
 const PLUGIN_NAME = 'DashboardsPlugin';
 import { updateWorkerAttributesForCapacity } from './utils/workerUtil';
 
+import SyncHelper from "./utils/syncHelper";
+import MyStats from "./components/MyStats/MyStats";
+
 export default class DashboardsPlugin extends FlexPlugin {
   constructor() {
     super(PLUGIN_NAME);
@@ -23,6 +26,14 @@ export default class DashboardsPlugin extends FlexPlugin {
    */
   async init(flex, manager) {
     this.registerReducers(manager);
+    SyncHelper.init(manager);
+
+    flex.MainHeader.Content.add(
+      <MyStats key="my-agent-stats" />, 
+      { sortOrder: -999, align: 'end' }
+    );
+
+
 
     //Queue Stats Dashboard enhancements
     QueuesView(manager);
@@ -33,6 +44,7 @@ export default class DashboardsPlugin extends FlexPlugin {
     const workerSid = manager.workerClient.sid;
     await updateWorkerAttributesForCapacity(workerSid);
 
+    await SyncHelper.fetchAndSubcribeToSyncDoc();
   }
 
   /**
