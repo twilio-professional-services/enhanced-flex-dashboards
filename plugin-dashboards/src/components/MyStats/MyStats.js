@@ -14,17 +14,17 @@ class MyStats extends React.PureComponent {
     console.log(PLUGIN_NAME, 'MyStats props', this.props);
     const {callStats, chatStats} = this.props;
     let callAHT = callStats.answered + callStats.outbound > 0 ?
-      callStats.totalHandlingTime / (callStats.answered + callStats.outbound): "??";
+      (callStats.totalHandlingTime / (callStats.answered + callStats.outbound)).toFixed(1) : "??";
 
-    let chatAHT = chatStats.handled > 0? chatStats.totalHandlingTime / chatStats.handled: "??";
+    let chatAHT = chatStats.handled > 0? (chatStats.totalHandlingTime / chatStats.handled).toFixed(1) : "??";
 
     return (
       <Container>
         <Title>
           Calls In/Out: {callStats?.answered} / {callStats?.outbound}, 
-          AHT: {callAHT} |
+          AHT: {callAHT}s |
           Chats: {chatStats?.handled},
-          AHT: {chatAHT}
+          AHT: {chatAHT}s
         </Title>
       </Container>
     )
