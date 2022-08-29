@@ -23,6 +23,11 @@ This plugin leverages a Serverless function to update a worker's attributes with
 
 <img width="800px" src="images/enhancedTeamsView.png"/>
 
+August 2022 Update: This plugin now also includes a custom component to display the Agent's Daily Metrics/KPIs in the top header bar.  This solution is using a Servlerless function to capture [Task Router events](https://www.twilio.com/docs/taskrouter/api/event/reference) and update a [Sync Doc](https://media.twiliocdn.com/sdk/js/sync/releases/0.9.2/docs/Client.html#document__anchor) (1 Sync Doc per worker).  The application Redux store subscribes to [Sync Doc "updated" events](https://media.twiliocdn.com/sdk/js/sync/releases/0.9.2/docs/Document.html#event:updated) and displays the current data to the Agent.
+
+<img width="700px" src="images/agentMyStats.png"/>
+
+The displayed metrics are intra-day only and will reset to 0 when the agent logs in the next day.
 
 
 # Configuration
@@ -71,7 +76,10 @@ Create the Serverless config file by copying `.env.example` to `.env`.
 cd dashboard-service
 cp .env.example .env
 ```
-Edit `.env` and set the `TWILIO_WORKSPACE_SID` variable to your Twilio TaskRouter Workspace Sid. Next, deploy the Serverless functions:
+Edit `.env` and set the `TWILIO_WORKSPACE_SID` variable to your Twilio TaskRouter Workspace Sid. 
+Set the `TWILIO_SYNC_SERVICE_SID` variable to your default Sync Service Sid.
+
+Next, deploy the Serverless functions:
 
 ```bash
 cd dashboard-service
@@ -85,10 +93,24 @@ Deployment Details
 Domain: dashboard-service-xxxx-dev.twil.io
 
 Functions:
+  [protected] https://dashboard-service-xxxx-dev.twil.io/taskrouter-event-handler
    https://dashboard-service-xxxx-dev.twil.io/update-worker-capacity
 ```
 
 Your function will now be present in the Twilio Functions Console and be part of the "dashboard-service" service. Copy the base URL from the function.
+
+### TaskRouter Events Callback URL
+
+Configure the Task Router Events callback URL as follows:
+
+<img width="700px" src="images/trEventsCallbackURL.png"/>
+
+Select the following events:
+
+<img width="700px" src="images/trSelectEvents.png"/>
+
+
+
 
 ## Flex Plugin
 
