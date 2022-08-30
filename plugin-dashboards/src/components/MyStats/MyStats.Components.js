@@ -1,9 +1,9 @@
-import styled from 'react-emotion';
+import styled from "react-emotion";
 
-export const Container = styled('div')`
+export const Container = styled("div")`
   display: flex;
   flex: 1 1 auto;
-  flex-direction: column;
+  flex-direction: row;
   font-size: 10px;
   margin-bottom: auto;
   margin-right: 4px;
@@ -11,8 +11,25 @@ export const Container = styled('div')`
   text-align: center;
 `;
 
-export const Title = styled('span')`
-  font-size: 12px;
+export const Tile = styled("div")`
+  background-color: #606471;
+  border-radius: 3px;
+  flex-direction: column;
+  margin-right: 5px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  padding-left: 6px;
+  padding-right: 6px;
+`;
+
+export const Metric = styled("div")`
+  font-size: 14px;
   font-weight: bold;
-  margin: 1px 0px;
+  color: #ffffff;
+`;
+
+export const Label = styled("div")`
+  font-size: 8px;
+  font-weight: bold;
+  color: #ffffff;
 `;
