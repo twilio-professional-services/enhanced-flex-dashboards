@@ -25,7 +25,7 @@ This plugin leverages a Serverless function to update a worker's attributes with
 
 August 2022 Update: This plugin now also includes a custom component to display the Agent's Daily Metrics/KPIs in the top header bar.  This solution is using a Servlerless function to capture [Task Router events](https://www.twilio.com/docs/taskrouter/api/event/reference) and update a [Sync Doc](https://media.twiliocdn.com/sdk/js/sync/releases/0.9.2/docs/Client.html#document__anchor) (1 Sync Doc per worker).  The application Redux store subscribes to [Sync Doc "updated" events](https://media.twiliocdn.com/sdk/js/sync/releases/0.9.2/docs/Document.html#event:updated) and displays the current data to the Agent.
 
-<img width="700px" src="images/agentMyStats.png"/>
+<img width="700px" src="images/myAgentStatsV2.png"/>
 
 The displayed metrics are intra-day only and will reset to 0 when the agent logs in the next day.
 

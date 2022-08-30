@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-
+import { Icon } from '@twilio/flex-ui';
 import { Container, Label, Metric, Tile } from "./MyStats.Components";
 
 const PLUGIN_NAME = "DashboardsPlugin";
@@ -27,23 +27,31 @@ class MyStats extends React.PureComponent {
 
     return (
       <Container>
+        <Icon icon='Call' />
         <Tile>
           <Metric>
-            {callStats?.answered} / {callStats?.outbound}
+            {callStats?.answered}
           </Metric>
-          <Label>Calls In/Out</Label>
+          <Label>Inbound</Label>
+        </Tile>
+        <Tile>
+          <Metric>
+            {callStats?.outbound}
+          </Metric>
+          <Label>Outbound</Label>
         </Tile>
         <Tile>
           <Metric>{callAHT}s</Metric>
-          <Label>AHT</Label>
+          <Label>Average Handle Time</Label>
         </Tile>
+        <Icon icon='Message' />
         <Tile>
           <Metric>{chatStats?.handled}</Metric>
           <Label>Chats</Label>
         </Tile>
         <Tile>
           <Metric>{chatAHT}s</Metric>
-          <Label>AHT</Label>
+          <Label>Average Handle Time</Label>
         </Tile>
       </Container>
     );
