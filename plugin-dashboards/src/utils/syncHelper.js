@@ -4,7 +4,7 @@ import { Actions } from "../states/AgentMetricsState";
 
 const PLUGIN_NAME = "DashboardsPlugin";
 
-const SYNC_CLIENT = new SyncClient(Manager.getInstance().user.token);
+export const SYNC_CLIENT = new SyncClient(Manager.getInstance().user.token);
 
 function tokenUpdateHandler() {
   console.log(PLUGIN_NAME, "Refreshing SYNC_CLIENT Token");

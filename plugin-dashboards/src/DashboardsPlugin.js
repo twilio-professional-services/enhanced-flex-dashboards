@@ -7,7 +7,7 @@ import TeamsView from './components/TeamsView';
 import CustomActions from './actions';
 
 const PLUGIN_NAME = 'DashboardsPlugin';
-import { updateWorkerAttributesForCapacity } from './utils/workerUtil';
+import { updateWorkerCapacity } from './utils/workerUtil';
 
 import SyncHelper from "./utils/syncHelper";
 import MyStats from "./components/MyStats/MyStats";
@@ -42,7 +42,7 @@ export default class DashboardsPlugin extends FlexPlugin {
     CustomActions(manager);
 
     const workerSid = manager.workerClient.sid;
-    await updateWorkerAttributesForCapacity(workerSid);
+    await updateWorkerCapacity(workerSid);
 
     await SyncHelper.fetchAndSubcribeToSyncDoc();
   }

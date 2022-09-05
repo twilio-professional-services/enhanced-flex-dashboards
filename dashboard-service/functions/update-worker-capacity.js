@@ -1,7 +1,31 @@
 const TokenValidator = require("twilio-flex-token-validator").functionValidator;
 
+const fetchSyncDoc = (client, syncServiceSid, syncDocName) => {
+  return (syncDoc = client.sync.v1
+    .services(syncServiceSid)
+    .documents(syncDocName)
+    .fetch());
+};
+
+const createSyncDoc = (client, syncServiceSid, syncDocName, data) => {
+  return client.sync.v1.services(syncServiceSid).documents.create({
+    uniqueName: syncDocName,
+    data: data
+  });
+};
+
+const updateSyncDoc = (client, syncServiceSid, syncDoc) => {
+  return client.sync.v1
+    .services(syncServiceSid)
+    .documents(syncDoc.uniqueName)
+    .update({ data: syncDoc.data });
+};
+
+
+
 exports.handler = TokenValidator(async function (context, event, callback) {
   const client = context.getTwilioClient();
+  const syncServiceSid = context.TWILIO_SYNC_SERVICE_SID;
   const response = new Twilio.Response();
 
   response.appendHeader("Access-Control-Allow-Origin", "*");
@@ -33,30 +57,48 @@ exports.handler = TokenValidator(async function (context, event, callback) {
       }
     })
 
-    //Update capacity in Worker attributes
+    //Update worker capacity sync doc
+    const syncDocName = `workerCapacityFor-${workerSid}`;
+    let syncDoc = null;
+    let channelCapacity = { chatCapacity, chatTasks, chatAvailable, smsCapacity, smsTasks, smsAvailable };
+    try {
+      syncDoc = await fetchSyncDoc(client, syncServiceSid, syncDocName);
+      syncDoc.data = channelCapacity;
+      await updateSyncDoc(client, syncServiceSid, syncDoc);
+    } catch (error) {
+      console.log(
+        "Error fetching sync doc. Assume it didn't existe and create one",
+        error
+      );
+      syncDoc = await createSyncDoc(client, syncServiceSid, syncDocName, channelCapacity);
+    }
     
-    const worker = await client.taskrouter
-      .workspaces(context.TWILIO_WORKSPACE_SID)
-      .workers(workerSid)
-      .fetch();
 
-    //console.log('Worker:', worker);
-    // Worker Attributes are encoded as Json string
-    let workersAttributes = JSON.parse(worker.attributes);
+    //Update capacity in Worker attributes
 
-    workersAttributes = {
-      ...workersAttributes, chatAvailable, smsAvailable,
-      chatCapacity, chatTasks, smsCapacity, smsTasks};
+    // const worker = await client.taskrouter
+    //   .workspaces(context.TWILIO_WORKSPACE_SID)
+    //   .workers(workerSid)
+    //   .fetch();
 
-    const updateWorker = await client.taskrouter
-      .workspaces(context.TWILIO_WORKSPACE_SID)
-      .workers(workerSid)
-      .update({ attributes: JSON.stringify(workersAttributes) });
+    // //console.log('Worker:', worker);
+    // // Worker Attributes are encoded as Json string
+    // let workersAttributes = JSON.parse(worker.attributes);
+
+    // workersAttributes = {
+    //   ...workersAttributes, chatAvailable, smsAvailable,
+    //   chatCapacity, chatTasks, smsCapacity, smsTasks
+    // };
+
+    // const updateWorker = await client.taskrouter
+    //   .workspaces(context.TWILIO_WORKSPACE_SID)
+    //   .workers(workerSid)
+    //   .update({ attributes: JSON.stringify(workersAttributes) });
 
     //console.log('Updated', workerSid, 'attributes with', workersAttributes);
 
     response.appendHeader("Content-Type", "application/json");
-    response.setBody(JSON.parse(updateWorker.attributes));
+    response.setBody(syncDoc.data);
     return callback(null, response);
   } catch (err) {
     returnError(callback, response, err.message);

@@ -10,7 +10,6 @@ class MyStats extends React.PureComponent {
   }
 
   render() {
-    console.log(PLUGIN_NAME, "MyStats props", this.props);
     const { callStats, chatStats } = this.props;
     let callAHT =
       callStats.answered + callStats.outbound > 0

@@ -1,4 +1,5 @@
 import { WorkersDataTable, ColumnDefinition } from '@twilio/flex-ui';
+import AgentCapacityCard from './AgentCapacityCard/AgentCapacityCard';
 
 const displayRoleCode = (manager) => {
   window.Handlebars.registerHelper('showRoleCode', (workerAttributes) => {
@@ -20,37 +21,19 @@ const displayRoleCode = (manager) => {
 }
 
 const addColumns = () => {
-  WorkersDataTable.Content.add(<ColumnDefinition key="maxChat" header={"Chat Util."} style={{ width: 75 }}
-    content={item => {
-      if (Object.hasOwn(item.worker.attributes, "chatTasks")
-        && Object.hasOwn(item.worker.attributes, "chatCapacity")
-        && Object.hasOwn(item.worker.attributes, "chatAvailable")) {
-        return item.worker.attributes.chatAvailable ?
-          item.worker.attributes.chatTasks + " / " + item.worker.attributes.chatCapacity :
-          "X";
-      } else {
-        return "?";
-      }
-    }} />);
-  WorkersDataTable.Content.add(<ColumnDefinition key="maxSMS" header={"SMS Util."} style={{ width: 75 }}
-    content={item => {
-      if (Object.hasOwn(item.worker.attributes, "smsTasks")
-        && Object.hasOwn(item.worker.attributes, "smsCapacity")
-        && Object.hasOwn(item.worker.attributes, "smsAvailable")) {
-        return item.worker.attributes.smsAvailable ?
-          item.worker.attributes.smsTasks + " / " + item.worker.attributes.smsCapacity :
-          "X";
-      } else {
-        return "?";
-      }
-    }} />);
+
+  WorkersDataTable.Content.add(<ColumnDefinition key="channelCapacity" header={"Capacity"} style={{ width: 75 }}
+    content={(item, context) => (
+      <AgentCapacityCard workerSid={item.worker.sid} context={context} />
+    )}
+  />, { sortOrder: 10 });
 
   WorkersDataTable.Content.add(<ColumnDefinition key="skills" header={"Skills"}
     content={item => {
       return item.worker.attributes.routing ?
         item.worker.attributes.routing?.skills.join(' / ') : 'NONE'
-    }
-    } />);
+    }}
+  />, { sortOrder: 5 });
 
   // WorkersDataTable.Content.add(<ColumnDefinition key="team" header={"Team"} 
   // content={item => item.worker.attributes.team_name}/>);

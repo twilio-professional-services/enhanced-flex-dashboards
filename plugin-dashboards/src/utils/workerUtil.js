@@ -26,7 +26,7 @@ export const updateWorkerCapacity = async (worker) => {
 }
 
 export const updateWorkerAttributesForCapacity = async (workerSid) => {
-  console.debug(PLUGIN_NAME, 'Update Worker Channels Capacity');
+  console.debug(PLUGIN_NAME, 'Update Worker Channels Capacity Sync Doc');
   const fetchUrl = `${process.env.FLEX_APP_FUNCTIONS_BASE}/update-worker-capacity`;
   const fetchBody = {
     Token: manager.store.getState().flex.session.ssoTokenPayload.token,
@@ -40,14 +40,13 @@ export const updateWorkerAttributesForCapacity = async (workerSid) => {
     }
   };
 
-  let worker;
+  let workerCapacity;
   try {
     const response = await fetch(fetchUrl, fetchOptions);
-    worker = await response.json();
-    console.debug(PLUGIN_NAME, 'Updated Worker:', worker);
+    workerCapacity = await response.json();
+    console.debug(PLUGIN_NAME, 'Updated Worker Capacity Sync Doc:', workerCapacity);
   } catch (error) {
-    console.error(PLUGIN_NAME, 'Failed to update worker');
+    console.error(PLUGIN_NAME, 'Failed to update sync doc');
   }
-  //Fix attributes, Json string back to object
-  return worker;
+  return workerCapacity;
 }
