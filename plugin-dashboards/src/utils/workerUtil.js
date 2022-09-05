@@ -2,30 +2,30 @@ import { Manager } from '@twilio/flex-ui';
 const manager = Manager.getInstance();
 const PLUGIN_NAME = 'DashboardsPlugin';
 
-export const updateWorkerCapacity = async (worker) => {
-  //Note: This only works at plugin init.  
-  //TR SDK does not receive real-time updates from Worker Channel changes to assigned tasks
-  let chatCapacity = 0, smsCapacity = 0;
-  let chatTasks = 0, smsTasks = 0;
-  let workerChannels = worker.channels; // returns Map
-  console.log(PLUGIN_NAME, workerChannels);
-  workerChannels.forEach( (wc, key) => {
-    if (wc.taskChannelUniqueName == "chat") {
-      chatCapacity = wc.capacity;
-      chatTasks = wc.assignedTasks;
-    } else if (wc.taskChannelUniqueName == "sms") {
-      smsCapacity = wc.capacity;
-      smsTasks = wc.assignedTasks;
-    }
-  } );
-  let workerAttributes = worker.attributes;
-  let newWorkerAttributes = {...workerAttributes, chatCapacity, chatTasks, smsCapacity, smsTasks}
-  console.log(PLUGIN_NAME, 'Updated Worker Attributes:', newWorkerAttributes);
-  await worker.setAttributes(newWorkerAttributes);
+// export const updateWorkerCapacity = async (worker) => {
+//   //Note: This only works at plugin init.  
+//   //TR SDK does not receive real-time updates from Worker Channel changes to assigned tasks
+//   let chatCapacity = 0, smsCapacity = 0;
+//   let chatTasks = 0, smsTasks = 0;
+//   let workerChannels = worker.channels; // returns Map
+//   console.log(PLUGIN_NAME, workerChannels);
+//   workerChannels.forEach( (wc, key) => {
+//     if (wc.taskChannelUniqueName == "chat") {
+//       chatCapacity = wc.capacity;
+//       chatTasks = wc.assignedTasks;
+//     } else if (wc.taskChannelUniqueName == "sms") {
+//       smsCapacity = wc.capacity;
+//       smsTasks = wc.assignedTasks;
+//     }
+//   } );
+//   let workerAttributes = worker.attributes;
+//   let newWorkerAttributes = {...workerAttributes, chatCapacity, chatTasks, smsCapacity, smsTasks}
+//   console.log(PLUGIN_NAME, 'Updated Worker Attributes:', newWorkerAttributes);
+//   await worker.setAttributes(newWorkerAttributes);
 
-}
+// }
 
-export const updateWorkerAttributesForCapacity = async (workerSid) => {
+export const updateWorkerCapacity = async (workerSid) => {
   console.debug(PLUGIN_NAME, 'Update Worker Channels Capacity Sync Doc');
   const fetchUrl = `${process.env.FLEX_APP_FUNCTIONS_BASE}/update-worker-capacity`;
   const fetchBody = {
