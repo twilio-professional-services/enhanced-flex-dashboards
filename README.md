@@ -24,6 +24,8 @@ The Flex [Real-Time Queues View](https://www.twilio.com/docs/flex/end-user-guide
 
 The [Queues Data Table](https://www.twilio.com/docs/flex/developer/ui/queues-view-programmability#modify-the-queuesdatatable) can be modifed by removing and (re)adding columns with metrics.
 
+The Flex reference docs contain a listing of all [properties for each WorkerQueue](https://assets.flex.twilio.com/docs/releases/flex-ui/1.30.2/QueuesStats%25E2%2580%25A4QueuesDataTable.html#.QueuesStats%E2%80%A4WorkerQueue) in the QueueStats data set. 
+
 Additional [Tiles](https://www.twilio.com/docs/flex/developer/ui/queues-view-programmability#add-or-remove-individual-data-tiles) can be added with custom metrics/KPIs.
 
 <img width="600px" src="images/queueStatsTiles.png"/>
