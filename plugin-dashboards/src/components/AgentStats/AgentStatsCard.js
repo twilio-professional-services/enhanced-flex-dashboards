@@ -87,13 +87,16 @@ class AgentStatsCard extends React.PureComponent {
     if (taskCount > 0) {
       const aht = Math.floor(totalHandleTime / taskCount);
       if (aht > 60) {
-        timeStr = Math.floor(aht / 60) + ":" + aht % 60;
+        let seconds = aht % 60;
+        if (seconds < 10) seconds = "0" + seconds;
+        timeStr = Math.floor(aht / 60) + ":" + seconds;
       } else {
         timeStr = aht + "s";
       }
       return timeStr;
     }
   }
+
 
   render() {
     const { callStats, chatStats } = this.state;
