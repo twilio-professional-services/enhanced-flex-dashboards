@@ -2,6 +2,8 @@ import * as Flex from "@twilio/flex-ui";
 import { connect } from "react-redux";
 
 import { ColumnDefinition, QueuesStats } from '@twilio/flex-ui';
+import QueueFilters from "./QueueFilters/QueueFilters";
+
 const PLUGIN_NAME = 'DashboardsPlugin';
 
 export default (manager) => {
@@ -9,74 +11,161 @@ export default (manager) => {
   customizeQueueStats();
   console.log(PLUGIN_NAME, 'Adding Tiles');
   addTiles();
+  addFilters();
 }
 
-const TasksTile1 = connect((state) => {
-  const queues = Object.values(state.flex.realtimeQueues.queuesList);
+const addFilters = () => {
+
+  Flex.QueuesStatsView.Content.add(<QueueFilters key="queue-filters" />, {
+    align: 'start',
+    sortOrder: 0,
+  })
+}
+
+const getTasksByGroup = (queues, group) => {
   let activeTasks = 0;
   let waitingTasks = 0;
   if (queues && queues.length > 0) {
     queues.forEach(q => {
-      if (q.friendly_name.toLowerCase().includes("sales")) {
+      if (q.friendly_name.toLowerCase().includes(group)) {
         if (q.tasks_by_status) {
           activeTasks += q.tasks_by_status.assigned + q.tasks_by_status.wrapping;
           waitingTasks += q.tasks_by_status.pending + q.tasks_by_status.reserved;
         }
       }
     })
-    return {
-      activeTasks: activeTasks.toString() + " / " + waitingTasks.toString()
-    };
-  } else {
-    return {
-      activeTasks: "0"
-    };
   }
-  
-})(({ activeTasks }) => (
-  <Flex.AggregatedDataTile title="Sales Tasks" content={activeTasks} description="Active / Waiting" />
+  return { activeTasks, waitingTasks }
+}
+
+const TasksTile1 = connect((state) => {
+  const queues = Object.values(state.flex.realtimeQueues.queuesList);
+  let tasks = getTasksByGroup(queues, "sales");
+  return tasks;
+})((tasks) => (
+  <Flex.AggregatedDataTile title="Sales (Active)" content={tasks.activeTasks}
+    description={"Waiting: " + tasks.waitingTasks} />
 ));
 
 
 const TasksTile2 = connect((state) => {
   const queues = Object.values(state.flex.realtimeQueues.queuesList);
+  let tasks = getTasksByGroup(queues, "service");
+  return tasks;
+})((tasks) => (
+  <Flex.AggregatedDataTile title="Service (Active)" content={tasks.activeTasks}
+    description={"Waiting: " + tasks.waitingTasks} />
+));
+
+const getTasksByChannel = (queues, channelName) => {
   let activeTasks = 0;
   let waitingTasks = 0;
   if (queues && queues.length > 0) {
     queues.forEach(q => {
-      if (q.friendly_name.toLowerCase().includes("service")) {
-        if (q.tasks_by_status) {
-          activeTasks += q.tasks_by_status.assigned + q.tasks_by_status.wrapping;
-          waitingTasks += q.tasks_by_status.pending + q.tasks_by_status.reserved;
-        }
+      if (q.channels) {
+        q.channels.forEach(ch => {
+          if (ch.unique_name == channelName) {
+            activeTasks += ch.tasks_now?.active_tasks;
+            waitingTasks += ch.tasks_now?.waiting_tasks;
+          }
+        })
       }
     })
-    return {
-      activeTasks: activeTasks.toString() + " / " + waitingTasks.toString()
-    };
-  } else {
-    return {
-      activeTasks: "0"
-    };
   }
-  
-})(({ activeTasks }) => (
-  <Flex.AggregatedDataTile title="Service Tasks" content={activeTasks} description="Active / Waiting" />
+  return { activeTasks, waitingTasks };
+}
+
+const getSLTodayByChannel = (queues, channelName) => {
+  let handledTasks = 0;
+  let handledTasksWithinSL = 0;
+  if (queues && queues.length > 0) {
+    queues.forEach(q => {
+      if (q.channels) {
+        q.channels.forEach(ch => {
+          if (ch.unique_name == channelName) {
+            //Not all queues/channels have SLA
+            if (ch.sla_today) {
+              handledTasks += ch?.sla_today?.handled_tasks_count;
+              handledTasksWithinSL += ch?.sla_today?.handled_tasks_within_sl_threshold_count;
+            }
+          }
+        })
+      }
+    })
+  }
+  let serviceLevelPct = 0;
+  if (handledTasks > 0) serviceLevelPct = Math.floor((handledTasksWithinSL / handledTasks) * 100);
+  return { handledTasks, handledTasksWithinSL, serviceLevelPct };
+}
+
+
+
+const ChatTasksTile = connect((state) => {
+  const queues = Object.values(state.flex.realtimeQueues.queuesList);
+  let tasks = getTasksByChannel(queues, "chat");
+  return tasks;
+})(( tasks ) => (
+  <Flex.AggregatedDataTile title="Chats" content={tasks.activeTasks} description="Active" />
 ));
 
+const VoiceTasksTile = connect((state) => {
+  const queues = Object.values(state.flex.realtimeQueues.queuesList);
+  let tasks = getTasksByChannel(queues, "voice");
+  return tasks;
+})((tasks) => (
+  <Flex.AggregatedDataTile title="Calls" content={tasks.activeTasks} description="Active" />
+));
 
+const ChatSLATile = connect((state) => {
+  const queues = Object.values(state.flex.realtimeQueues.queuesList);
+  let sla = getSLTodayByChannel(queues, "chat");
+  return sla;
+})((sla) => (
+  <Flex.AggregatedDataTile title="Chat SLA" content={sla.serviceLevelPct + "%"}
+    description={sla.handledTasksWithinSL + " / " + sla.handledTasks} />
+));
+
+const VoiceSLATile = connect((state) => {
+  const queues = Object.values(state.flex.realtimeQueues.queuesList);
+  let sla = getSLTodayByChannel(queues, "voice");
+  return sla;
+})((sla) => (
+  <Flex.AggregatedDataTile title="Voice SLA" content={sla.serviceLevelPct + "%"}
+    description={sla.handledTasksWithinSL + " / " + sla.handledTasks} />
+));
 
 const addTiles = () => {
   Flex.QueuesStats.AggregatedQueuesDataTiles.Content.add(
+    <ChatTasksTile key="chat-tasks-tile" />,
+    { sortOrder: -6 }
+  );
+  Flex.QueuesStats.AggregatedQueuesDataTiles.Content.add(
+    <ChatSLATile key="chat-sla-tile" />,
+    { sortOrder: -5 }
+  );
+  Flex.QueuesStats.AggregatedQueuesDataTiles.Content.add(
+    <VoiceTasksTile key="voice-tasks-tile" />,
+    { sortOrder: -4 }
+  );
+  Flex.QueuesStats.AggregatedQueuesDataTiles.Content.add(
+    <VoiceSLATile key="voice-sla-tile" />,
+    { sortOrder: -3 }
+  );
+  Flex.QueuesStats.AggregatedQueuesDataTiles.Content.add(
     <TasksTile1 key="tasks-tile-1" />,
-    { sortOrder: -1 }
+    { sortOrder: -2 }
   );
   Flex.QueuesStats.AggregatedQueuesDataTiles.Content.add(
     <TasksTile2 key="tasks-tile-2" />,
     { sortOrder: -1 }
   );
 
+  //Remove original tiles
+  Flex.QueuesStats.AggregatedQueuesDataTiles.Content.remove('active-tasks-tile');
+  Flex.QueuesStats.AggregatedQueuesDataTiles.Content.remove('waiting-tasks-tile');
+  Flex.QueuesStats.AggregatedQueuesDataTiles.Content.remove('longest-wait-time-tile');
 }
+
 
 
 

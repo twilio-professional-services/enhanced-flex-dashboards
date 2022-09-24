@@ -1,5 +1,6 @@
 import { WorkersDataTable, ColumnDefinition } from '@twilio/flex-ui';
 import AgentCapacityCard from './AgentCapacityCard/AgentCapacityCard';
+import AgentStatsCard from './AgentStats/AgentStatsCard';
 
 const displayRoleCode = (manager) => {
   window.Handlebars.registerHelper('showRoleCode', (workerAttributes) => {
@@ -22,13 +23,19 @@ const displayRoleCode = (manager) => {
 
 const addColumns = () => {
 
+  WorkersDataTable.Content.add(<ColumnDefinition key="agentStats" header={"Handled | AHT"} style={{ width: 150 }}
+    content={(item, context) => (
+      <AgentStatsCard workerSid={item.worker.sid} context={context} />
+    )}
+  />, { sortOrder: 3 });
+
   WorkersDataTable.Content.add(<ColumnDefinition key="channelCapacity" header={"Capacity"} style={{ width: 75 }}
     content={(item, context) => (
       <AgentCapacityCard workerSid={item.worker.sid} context={context} />
     )}
   />, { sortOrder: 10 });
 
-  WorkersDataTable.Content.add(<ColumnDefinition key="skills" header={"Skills"}
+  WorkersDataTable.Content.add(<ColumnDefinition key="skills" header={"Skills"} style={{ width: 150 }}
     content={item => {
       return item.worker.attributes.routing ?
         item.worker.attributes.routing?.skills.join(' / ') : 'NONE'
