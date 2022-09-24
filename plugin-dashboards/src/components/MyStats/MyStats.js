@@ -9,20 +9,23 @@ class MyStats extends React.PureComponent {
     super(props);
   }
 
+  formatHandleTime = (totalHandleTime, taskCount) => {
+    let timeStr = "0";
+    if (taskCount > 0) {
+      const aht = Math.floor(totalHandleTime / taskCount);
+      if (aht > 60) {
+        timeStr = Math.floor(aht / 60) + ":" + aht % 60;
+      } else {
+        timeStr = aht + "s";
+      }
+      return timeStr;
+    }
+  }
+
   render() {
     const { callStats, chatStats } = this.props;
-    let callAHT =
-      callStats.answered + callStats.outbound > 0
-        ? (
-            callStats.totalHandlingTime /
-            (callStats.answered + callStats.outbound)
-          ).toFixed(1)
-        : "??";
-
-    let chatAHT =
-      chatStats.handled > 0
-        ? (chatStats.totalHandlingTime / chatStats.handled).toFixed(1)
-        : "??";
+    let callAHT = this.formatHandleTime(callStats.totalHandlingTime, callStats.answered + callStats.outbound);
+    let chatAHT = this.formatHandleTime(chatStats.totalHandlingTime, chatStats.handled);
 
     return (
       <Container>
@@ -40,7 +43,7 @@ class MyStats extends React.PureComponent {
           <Label>Outbound</Label>
         </Tile>
         <Tile>
-          <Metric>{callAHT}s</Metric>
+          <Metric>{callAHT}</Metric>
           <Label>Average Handle Time</Label>
         </Tile>
         <Icon icon='Message' />
@@ -49,7 +52,7 @@ class MyStats extends React.PureComponent {
           <Label>Chats</Label>
         </Tile>
         <Tile>
-          <Metric>{chatAHT}s</Metric>
+          <Metric>{chatAHT}</Metric>
           <Label>Average Handle Time</Label>
         </Tile>
       </Container>

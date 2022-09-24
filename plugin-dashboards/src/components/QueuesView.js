@@ -105,7 +105,8 @@ const ChatTasksTile = connect((state) => {
   let tasks = getTasksByChannel(queues, "chat");
   return tasks;
 })(( tasks ) => (
-  <Flex.AggregatedDataTile title="Chats" content={tasks.activeTasks} description="Active" />
+  <Flex.AggregatedDataTile title="Active Chats" content={tasks.activeTasks} 
+    description={"Waiting: " + tasks.waitingTasks} />
 ));
 
 const VoiceTasksTile = connect((state) => {
@@ -113,7 +114,8 @@ const VoiceTasksTile = connect((state) => {
   let tasks = getTasksByChannel(queues, "voice");
   return tasks;
 })((tasks) => (
-  <Flex.AggregatedDataTile title="Calls" content={tasks.activeTasks} description="Active" />
+  <Flex.AggregatedDataTile title="Active Calls" content={tasks.activeTasks} 
+    description={"Waiting: " + tasks.waitingTasks} />
 ));
 
 const ChatSLATile = connect((state) => {

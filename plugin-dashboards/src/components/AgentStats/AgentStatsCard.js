@@ -82,29 +82,33 @@ class AgentStatsCard extends React.PureComponent {
     console.log(PLUGIN_NAME, 'Component Unmount');
   }
 
+  formatHandleTime = (totalHandleTime, taskCount) => {
+    let timeStr = "0";
+    if (taskCount > 0) {
+      const aht = Math.floor(totalHandleTime / taskCount);
+      if (aht > 60) {
+        timeStr = Math.floor(aht / 60) + ":" + aht % 60;
+      } else {
+        timeStr = aht + "s";
+      }
+      return timeStr;
+    }
+  }
+
   render() {
     const { callStats, chatStats } = this.state;
     let handledCalls = callStats.answered + callStats.outbound;
-    let callAHT =
-      callStats.answered + callStats.outbound > 0
-        ? (
-          callStats.totalHandlingTime /
-          (callStats.answered + callStats.outbound)
-        ).toFixed(1)
-        : "??";
 
-    let chatAHT =
-      chatStats.handled > 0
-        ? (chatStats.totalHandlingTime / chatStats.handled).toFixed(1)
-        : "??";
+    let callAHT = this.formatHandleTime(callStats.totalHandlingTime, handledCalls);
+    let chatAHT = this.formatHandleTime(chatStats.totalHandlingTime, chatStats.handled);
 
     return (
       <Container>
         <Channel>
-          <Handled>Calls: {handledCalls}</Handled> <AHT> AHT: {callAHT}s </AHT>
+          <Handled>Calls: {handledCalls}</Handled> <AHT> {callAHT} </AHT>
         </Channel>
         <Channel>
-          <Handled>Chats: {chatStats.handled} </Handled><AHT> AHT: {chatAHT}s </AHT>
+          <Handled>Chats: {chatStats.handled} </Handled> <AHT> {chatAHT} </AHT>
         </Channel>
       </Container>
     );
