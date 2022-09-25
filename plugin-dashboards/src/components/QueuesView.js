@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 
 import { ColumnDefinition, QueuesStats } from '@twilio/flex-ui';
 import QueueFilters from "./QueueFilters/QueueFilters";
+import ServiceLevelTile from "./ServiceLevelTile/ServiceLevelTile";
 
 const PLUGIN_NAME = 'DashboardsPlugin';
 
@@ -104,8 +105,8 @@ const ChatTasksTile = connect((state) => {
   const queues = Object.values(state.flex.realtimeQueues.queuesList);
   let tasks = getTasksByChannel(queues, "chat");
   return tasks;
-})(( tasks ) => (
-  <Flex.AggregatedDataTile title="Active Chats" content={tasks.activeTasks} 
+})((tasks) => (
+  <Flex.AggregatedDataTile title="Active Chats" content={tasks.activeTasks}
     description={"Waiting: " + tasks.waitingTasks} />
 ));
 
@@ -114,7 +115,7 @@ const VoiceTasksTile = connect((state) => {
   let tasks = getTasksByChannel(queues, "voice");
   return tasks;
 })((tasks) => (
-  <Flex.AggregatedDataTile title="Active Calls" content={tasks.activeTasks} 
+  <Flex.AggregatedDataTile title="Active Calls" content={tasks.activeTasks}
     description={"Waiting: " + tasks.waitingTasks} />
 ));
 
@@ -123,8 +124,11 @@ const ChatSLATile = connect((state) => {
   let sla = getSLTodayByChannel(queues, "chat");
   return sla;
 })((sla) => (
-  <Flex.AggregatedDataTile title="Chat SLA" content={sla.serviceLevelPct + "%"}
-    description={sla.handledTasksWithinSL + " / " + sla.handledTasks} />
+  <Flex.AggregatedDataTile title="Chat SLA"
+    description={sla.handledTasksWithinSL + " / " + sla.handledTasks} >
+    <ServiceLevelTile sla={sla} />
+  </Flex.AggregatedDataTile>
+
 ));
 
 const VoiceSLATile = connect((state) => {
@@ -132,8 +136,10 @@ const VoiceSLATile = connect((state) => {
   let sla = getSLTodayByChannel(queues, "voice");
   return sla;
 })((sla) => (
-  <Flex.AggregatedDataTile title="Voice SLA" content={sla.serviceLevelPct + "%"}
-    description={sla.handledTasksWithinSL + " / " + sla.handledTasks} />
+  <Flex.AggregatedDataTile title="Voice SLA"
+    description={sla.handledTasksWithinSL + " / " + sla.handledTasks} >
+    <ServiceLevelTile sla={sla} />
+  </Flex.AggregatedDataTile>
 ));
 
 const addTiles = () => {
