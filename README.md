@@ -9,8 +9,10 @@ This plugin contains a set of enhancements for the Teams View and the Real-Time 
 
 ### Queue Stats Dashboard
 - Filter Queues View by Agent's team_name attribute
+- Manual filter to only display a "group" of queues (based on partial queue name match).
 - Selectively remove a metric (waiting-tasks) based on the Queue Name
 - Add Titles with Active/Waiting tasks aggregated for a set of queues (using Queue Name)  
+- Add tiles with metrics aggregated by Channel
 
 ### Teams View
 - Add the agent's role code (A = Agent, S = Supervisor, D = Admin) in the Teams View
@@ -30,11 +32,16 @@ Additional [Tiles](https://www.twilio.com/docs/flex/developer/ui/queues-view-pro
 
 <img width="600px" src="images/queueStatsTiles.png"/>
 
+If you aggregate the Queue stats by channel you can display the total Active Chats & Calls and calculate the SLA per channel.  Color coding can be applied to enhance the UI for Supervisors.
+
+<img width="600px" src="images/queueStatsChannelSLATiles.png"/>
+
 The Teams View can be modified by adding and removing columns in the [WorkersDataTable](https://www.twilio.com/docs/flex/developer/ui/components#add-columns-to-workersdatatable). 
 
 This plugin leverages a Serverless function to update a Sync Doc with the worker's Chat and SMS channel capacity and assigned tasks counts from the [Worker Channel Resource](https://www.twilio.com/docs/taskrouter/api/worker-channel).  This function is invoked after the Accept Task action and again after the Complete Task action.
 
-<img width="800px" src="images/enhancedTeamsView.png"/>
+<img width="800px" src="images/teamsViewAgentAHTandCapacity.png"/>
+
 
 The JSON stored in these worker sync docs (Named: workerCapacityFor-WKxyz) has this structure:
 ```
@@ -49,8 +56,6 @@ The JSON stored in these worker sync docs (Named: workerCapacityFor-WKxyz) has t
 ```
 
 August 2022 Update: This plugin now also includes a custom component to display the Agent's Daily Metrics/KPIs in the top header bar.  This solution is using a Servlerless function to capture [Task Router events](https://www.twilio.com/docs/taskrouter/api/event/reference) and update a [Sync Doc](https://media.twiliocdn.com/sdk/js/sync/releases/0.9.2/docs/Client.html#document__anchor) (1 Sync Doc per worker).  The application Redux store subscribes to [Sync Doc "updated" events](https://media.twiliocdn.com/sdk/js/sync/releases/0.9.2/docs/Document.html#event:updated) and displays the current data to the Agent.
-
-<img width="700px" src="images/myAgentStatsV2.png"/>
 
 The displayed metrics are intra-day only and will reset to 0 when the agent logs in the next day.
 
