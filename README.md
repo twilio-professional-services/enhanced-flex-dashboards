@@ -18,6 +18,7 @@ This plugin contains a set of enhancements for the Teams View and the Real-Time 
 - Add the agent's role code (A = Agent, S = Supervisor, D = Admin) in the Teams View
 - Add the Chat and SMS channel utilization (assigned / capacity, X = Unavailable)
 - Display the agent's Skills
+- Display Handled Calls/Chat and AHT per worker (intra-day metrics)
 
 ### Agent Desktop
 - Show Agent's individual daily stats in top header
@@ -34,7 +35,7 @@ Additional [Tiles](https://www.twilio.com/docs/flex/developer/ui/queues-view-pro
 
 If you aggregate the Queue stats by channel you can display the total Active Chats & Calls and calculate the SLA per channel.  Color coding can be applied to enhance the UI for Supervisors.
 
-<img width="600px" src="images/queueStatsChannelSLATiles.png"/>
+<img width="800px" src="images/queueStatsChannelSLATiles.png"/>
 
 The Teams View can be modified by adding and removing columns in the [WorkersDataTable](https://www.twilio.com/docs/flex/developer/ui/components#add-columns-to-workersdatatable). 
 
