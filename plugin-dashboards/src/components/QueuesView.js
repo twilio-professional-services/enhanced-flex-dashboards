@@ -8,7 +8,7 @@ import ServiceLevelTile from "./ServiceLevelTile/ServiceLevelTile";
 const PLUGIN_NAME = 'DashboardsPlugin';
 
 export default (manager) => {
-  //setVisibleQueues(manager);
+  setVisibleQueues(manager);
   customizeQueueStats();
   console.log(PLUGIN_NAME, 'Adding Tiles');
   addTiles();
@@ -196,7 +196,7 @@ const setVisibleQueues = (manager) => {
     QueuesStats.setFilter((queue) => queue.friendly_name.substring(0, prefix.length) == prefix);
   } else {
     //Only show Anyone queue
-    //QueuesStats.setFilter((queue) => queue.friendly_name == "Everyone");
+    //QueuesStats.setSubscriptionFilter((queue) => queue.friendly_name == "Everyone");
 
   }
 }

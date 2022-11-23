@@ -39,15 +39,21 @@ class QueueFilters extends React.Component {
     if (group == DefaultFilter && channel == DefaultFilter) {
       //Show all
       QueuesStats.setFilter((queue) => true);
+      QueuesStats.setSubscriptionFilter((queue) => true);
     } else if (group == DefaultFilter) {
       //Only apply channel filter
       QueuesStats.setFilter((queue) => queue.friendly_name.includes(channel));
+      QueuesStats.setSubscriptionFilter((queue) => queue.friendly_name.includes(channel));
     } else if (channel == DefaultFilter) {
       //Only apply group filter
       QueuesStats.setFilter((queue) => queue.friendly_name.includes(group));
+      QueuesStats.setSubscriptionFilter((queue) => queue.friendly_name.includes(group));
     } else {
       //Apply both filters
       QueuesStats.setFilter((queue) => queue.friendly_name.includes(group) 
+                                  && queue.friendly_name.includes(channel));
+
+      QueuesStats.setSubscriptionFilter((queue) => queue.friendly_name.includes(group) 
                                   && queue.friendly_name.includes(channel));
     }
 

@@ -14,6 +14,8 @@ This plugin contains a set of enhancements for the Teams View and the Real-Time 
 - Add Titles with Active/Waiting tasks aggregated for a set of queues (using Queue Name)  
 - Add tiles with metrics aggregated by Channel
 
+Note: An updated version of the custom Queue Stats Data Tiles plugin can be found here: https://github.com/ldvlgr/queues-view-data-tiles (WIP). This plugin includes additional custom data tiles with dynamic background colors.
+
 ### Teams View
 - Add the agent's role code (A = Agent, S = Supervisor, D = Admin) in the Teams View
 - Add the Chat and SMS channel utilization (assigned / capacity, X = Unavailable)
