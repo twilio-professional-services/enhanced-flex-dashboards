@@ -18,6 +18,21 @@ export const Title = styled("h3")`
     text-transform: uppercase;
     font-weight: bold;
 `;
+
+
+export const Channel = styled("div")`
+  display: flex;
+  flex-direction: row;
+  height: 30px;
+  vertical-align: top;
+`;
+
+export const ChannelIcon = styled("div")`
+  margin-top: 0px;
+  margin-bottom: 0px;
+  height: 24px;
+`;
+
 export const Description = styled("div")`
     font-size: 10px;
     line-height: 18px;

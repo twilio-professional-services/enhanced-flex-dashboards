@@ -13,12 +13,13 @@ const GroupSLATile = connect((state, ownProps) => {
   //See https://react-redux.js.org/api/connect
 })((props) => {
   const { group, handledTasks, handledTasksWithinSL, serviceLevelPct } = props;
-  
+
   return (<CustomSLDataTile
     title={group + " SLA"}
-    content={serviceLevelPct}
-    description={handledTasksWithinSL + " / " + handledTasks} >
-  </CustomSLDataTile>)
+    slPct={serviceLevelPct}
+    handledTasks={handledTasks}
+    handledTasksWithinSL={handledTasksWithinSL}
+  />)
 });
 
 export default GroupSLATile

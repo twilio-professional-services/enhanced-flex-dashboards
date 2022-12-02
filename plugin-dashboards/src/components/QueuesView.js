@@ -6,8 +6,9 @@ import QueueFilters from "./QueueFilters/QueueFilters";
 import GroupTasksTile from "./GroupTasksTile";
 import ChannelTaskCountTile from "./ChannelTaskCountTile";
 import HandledTasksPieChart from "./HandledTasksPieChart";
-import ChannelSLATile from "./ChannelSLATile";
+import ChannelSLATile from "./ChannelSLATile/ChannelSLATile";
 import GroupSLATile from "./GroupSLATile";
+import AllChannelsSLATile from "./AllChannelsSLATile/AllChannelsSLATile";
 
 const PLUGIN_NAME = 'DashboardsPlugin';
 
@@ -16,6 +17,13 @@ const tileColors = {
   "chat": '#87CEFA',
   "sms": '#4682B4'
 }
+
+// const tileColors = {
+//   "voice": '#FFF5EE',
+//   "chat": '#F5DEB3',
+//   "sms": '#D2B48C'
+
+// };
 
 export default (manager) => {
   setVisibleQueues(manager);
@@ -37,9 +45,14 @@ const addFilters = () => {
 const addTiles = () => {
   //Add custom tile
   Flex.QueuesStats.AggregatedQueuesDataTiles.Content.add(
-    <HandledTasksPieChart key="custom-chart-tile" channelName="new" />,
-    { sortOrder: -10 }
+    <AllChannelsSLATile key="combo-data-tile" colors={tileColors} />,
+    { sortOrder: -11 }
   );
+
+  // Flex.QueuesStats.AggregatedQueuesDataTiles.Content.add(
+  //   <HandledTasksPieChart key="custom-chart-tile" channelName="new" />,
+  //   { sortOrder: -10 }
+  // );
 
   Flex.QueuesStats.AggregatedQueuesDataTiles.Content.add(
     <ChannelTaskCountTile key="chat-tasks-tile" channelName="chat" bgColor={tileColors.chat} />,
@@ -57,6 +70,11 @@ const addTiles = () => {
     <ChannelSLATile key="voice-sla-tile" channelName="voice" />,
     { sortOrder: -6 }
   );
+  // Flex.QueuesStats.AggregatedQueuesDataTiles.Content.add(
+  //   <ChannelSLATile key="sms-sla-tile" channelName="sms" />,
+  //   { sortOrder: -6 }
+  // );
+
   Flex.QueuesStats.AggregatedQueuesDataTiles.Content.add(
     <GroupTasksTile key="tasks-tile-1" group="sales" />,
     { sortOrder: -5 }
@@ -65,14 +83,21 @@ const addTiles = () => {
     <GroupSLATile key="sales-sla-tile" group="sales" />,
     { sortOrder: -4 }
   );
+  // Flex.QueuesStats.AggregatedQueuesDataTiles.Content.add(
+  //   <GroupTasksTile key="tasks-tile-2" group="service" />,
+  //   { sortOrder: -3 }
+  // );
   Flex.QueuesStats.AggregatedQueuesDataTiles.Content.add(
-    <GroupTasksTile key="tasks-tile-2" group="service" />,
-    { sortOrder: -3 }
+    <GroupSLATile key="service-sla-tile" group="service" />,
+    { sortOrder: -2 }
   );
+
+
   //Remove original tiles
   Flex.QueuesStats.AggregatedQueuesDataTiles.Content.remove('active-tasks-tile');
   Flex.QueuesStats.AggregatedQueuesDataTiles.Content.remove('waiting-tasks-tile');
   Flex.QueuesStats.AggregatedQueuesDataTiles.Content.remove('longest-wait-time-tile');
+  Flex.QueuesStats.AggregatedQueuesDataTiles.Content.remove('agents-by-activity-chart-tile');
 }
 
 
