@@ -9,6 +9,7 @@ import HandledTasksPieChart from "./HandledTasksPieChart";
 import ChannelSLATile from "./ChannelSLATile/ChannelSLATile";
 import GroupSLATile from "./GroupSLATile";
 import AllChannelsSLATile from "./AllChannelsSLATile/AllChannelsSLATile";
+import GroupsChartTile from "./GroupsChartTile/GroupsChartTile";
 
 const PLUGIN_NAME = 'DashboardsPlugin';
 
@@ -18,12 +19,8 @@ const tileColors = {
   "sms": '#4682B4'
 }
 
-// const tileColors = {
-//   "voice": '#FFF5EE',
-//   "chat": '#F5DEB3',
-//   "sms": '#D2B48C'
-
-// };
+const groupColors = ['#D8BFD8', '#DDA0DD', '#DA70D6', '#9370DB'];
+const queueGroups = ["sales", "service", "care", "fraud"];
 
 export default (manager) => {
   setVisibleQueues(manager);
@@ -46,13 +43,8 @@ const addTiles = () => {
   //Add custom tile
   Flex.QueuesStats.AggregatedQueuesDataTiles.Content.add(
     <AllChannelsSLATile key="combo-data-tile" colors={tileColors} />,
-    { sortOrder: -11 }
+    { sortOrder: -10 }
   );
-
-  // Flex.QueuesStats.AggregatedQueuesDataTiles.Content.add(
-  //   <HandledTasksPieChart key="custom-chart-tile" channelName="new" />,
-  //   { sortOrder: -10 }
-  // );
 
   Flex.QueuesStats.AggregatedQueuesDataTiles.Content.add(
     <ChannelTaskCountTile key="chat-tasks-tile" channelName="chat" bgColor={tileColors.chat} />,
@@ -74,22 +66,28 @@ const addTiles = () => {
   //   <ChannelSLATile key="sms-sla-tile" channelName="sms" />,
   //   { sortOrder: -6 }
   // );
+  
+  //GROUPS TILE
+  Flex.QueuesStats.AggregatedQueuesDataTiles.Content.add(
+    <GroupsChartTile key="groups-data-tile" colors={groupColors} groups={queueGroups} />,
+    { sortOrder: -5 }
+  );
 
   Flex.QueuesStats.AggregatedQueuesDataTiles.Content.add(
     <GroupTasksTile key="tasks-tile-1" group="sales" />,
-    { sortOrder: -5 }
+    { sortOrder: -4 }
   );
   Flex.QueuesStats.AggregatedQueuesDataTiles.Content.add(
     <GroupSLATile key="sales-sla-tile" group="sales" />,
-    { sortOrder: -4 }
+    { sortOrder: -3 }
   );
   // Flex.QueuesStats.AggregatedQueuesDataTiles.Content.add(
   //   <GroupTasksTile key="tasks-tile-2" group="service" />,
-  //   { sortOrder: -3 }
+  //   { sortOrder: -2 }
   // );
   Flex.QueuesStats.AggregatedQueuesDataTiles.Content.add(
     <GroupSLATile key="service-sla-tile" group="service" />,
-    { sortOrder: -2 }
+    { sortOrder: -1 }
   );
 
 

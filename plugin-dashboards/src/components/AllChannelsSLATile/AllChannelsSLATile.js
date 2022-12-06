@@ -34,33 +34,27 @@ const AllChannelsSLATile = connect((state) => {
                 <Description className="Twilio-AggregatedDataTile-Description">Channel SLA Today</Description>
                 <Channel>
                     <Icon icon='Call' />
-                    <Label bgColor={colors.voice}>Voice:&nbsp;</Label>
-                    {handledVoice > 0 &&
+                    <Label bgColor={colors.voice}>Voice:</Label>
+                    {handledVoice > 0 ?
                         <SLPct value={slPctVoice}> {slPctVoice}% </SLPct>
-                    }
-                    {!handledVoice &&
-                        <Metric> - </Metric>
+                        : <Metric> - </Metric>
                     }
                 </Channel>
                 <Channel>
                     <Icon icon='Message' />
-                    <Label bgColor={colors.chat}>Chat:&nbsp;</Label>
-                    {handledChat > 0 &&
+                    <Label bgColor={colors.chat}>Chat:</Label>
+                    {handledChat > 0 ?
                         <SLPct value={slPctChat}> {slPctChat}% </SLPct>
-                    }
-                    {!handledChat &&
-                        <Metric> - </Metric>
+                        : <Metric> - </Metric>
                     }
                 </Channel>
 
                 <Channel>
                     <Icon icon='Sms' />
-                    <Label bgColor={colors.sms}>SMS:&nbsp;</Label>
-                    {handledSMS > 0 &&
+                    <Label bgColor={colors.sms}>SMS:</Label>
+                    {handledSMS > 0 ?
                         <SLPct value={slPctSMS}> {slPctSMS}% </SLPct>
-                    }
-                    {!handledSMS &&
-                        <Metric> - </Metric>
+                        : <Metric> - </Metric>
                     }
                 </Channel>
                 <Description className="Twilio-AggregatedDataTile-Description">Handled Task Count &rarr;</Description>

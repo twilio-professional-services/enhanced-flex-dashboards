@@ -47,7 +47,6 @@ export const Content = styled("div")`
 
 function getColor(props) {
   let {value, count, greenLine, yellowLine} = props;
-  console.log('SL Data Tile getColor props:', props);
   //No color if handled tasks count = 0 (N/A)
   if (!count) return props.theme.colors.base2;
   if (!greenLine) greenLine = 90;
